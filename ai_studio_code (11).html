@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#050505] antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BLAZEBIT | DEFI ARCHITECTS</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050505',
+                        zinc: '#121212',
+                        neon: '#CCFF00', /* Blaze Acid */
+                        alert: '#FF2A00', /* Error Red */
+                        ice: '#F0F0F0',
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Syncopate', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    },
+                    animation: {
+                        'marquee': 'marquee 20s linear infinite',
+                        'marquee-reverse': 'marqueeReverse 20s linear infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050505; color: #F0F0F0; cursor: none; overflow-x: hidden; }
+        
+        /* 1. HYPER VISUAL POINTER (Pony Style) */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 9999;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px; background-color: #CCFF00; border-radius: 50%;
+        }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid rgba(204, 255, 0, 0.5); border-radius: 50%;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* 2. DYNAMIC NEON GRADIENT */
+        .neon-glow-bg {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(204, 255, 0, 0.15) 0%, transparent 60%);
+            animation: pulse-glow 5s ease-in-out infinite alternate;
+            pointer-events: none; z-index: 0;
+        }
+        @keyframes pulse-glow {
+            0% { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* UTILS */
+        .fluid-h1 { font-size: clamp(2.5rem, 9vw, 8rem); line-height: 0.85; letter-spacing: -0.04em; }
+        .text-stroke { -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4); color: transparent; }
+        ::-webkit-scrollbar { width: 0px; }
+        
+        /* ANIMATIONS */
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        @keyframes marqueeReverse { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }
+
+        /* 3D CUBE */
+        .scene { width: 100px; height: 100px; perspective: 400px; }
+        .cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: rotateCube 8s infinite linear; }
+        .cube__face { position: absolute; width: 100px; height: 100px; border: 2px solid #CCFF00; opacity: 0.3; background: rgba(204, 255, 0, 0.05); }
+        .cube__face--front  { transform: rotateY(  0deg) translateZ(50px); }
+        .cube__face--right  { transform: rotateY( 90deg) translateZ(50px); }
+        .cube__face--back   { transform: rotateY(180deg) translateZ(50px); }
+        .cube__face--left   { transform: rotateY(-90deg) translateZ(50px); }
+        .cube__face--top    { transform: rotateX( 90deg) translateZ(50px); }
+        .cube__face--bottom { transform: rotateX(-90deg) translateZ(50px); }
+        @keyframes rotateCube { 0% { transform: rotateX(0deg) rotateY(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
+
+        /* GLITCH HOVER */
+        .glitch-wrapper:hover .glitch-text { color: #CCFF00; text-shadow: 2px 0 #FF2A00, -2px 0 #00E5FF; }
+        .glitch-wrapper:hover { border-color: #CCFF00; background: rgba(204,255,0,0.02); }
+
+        /* SLIDER & SWIPE */
+        .comparison-container { position: relative; width: 100%; height: 400px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .comparison-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; }
+        .comparison-overlay { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; border-right: 2px solid #CCFF00; background-color: #050505; }
+        .handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: #CCFF00; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; cursor: ew-resize; z-index: 10; box-shadow: 0 0 15px #CCFF00; }
+        
+        .swipe-container { position: relative; width: 100%; height: 60px; background: #111; border: 1px solid #333; overflow: hidden; border-radius: 4px; user-select: none; }
+        .swipe-text { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: bold; letter-spacing: 2px; color: #555; pointer-events: none; z-index: 1; }
+        .swipe-track { position: absolute; top: 0; bottom: 0; left: 0; background: #CCFF00; width: 60px; display: flex; align-items: center; justify-content: center; cursor: grab; z-index: 2; transition: width 0.1s; }
+        .swipe-complete { background: #CCFF00 !important; width: 100% !important; transition: width 0.3s ease !important; }
+
+        /* VISUAL ASSETS */
+        .visual-bad { background: repeating-linear-gradient(45deg, #111 0px, #111 10px, #222 10px, #222 20px); filter: pixelate(10px); display: flex; align-items: center; justify-content: center; }
+        .visual-good { background: radial-gradient(circle at 50% 50%, rgba(204,255,0,0.1) 0%, transparent 50%), linear-gradient(to right, #050505, #111); background-size: 20px 20px; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body class="bg-void text-ice">
+
+    <!-- POINTER -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- LOADER -->
+    <div id="loader" class="fixed inset-0 bg-neon z-[100] flex flex-col justify-end p-6 transition-transform duration-700 ease-in-out">
+        <div class="font-display text-[15vw] font-bold text-void leading-none tracking-tighter">
+            <span id="load-count">00</span>%
+        </div>
+        <div class="border-t border-black w-full pt-2 flex justify-between font-mono text-xs text-black font-bold uppercase">
+            <span>// System: Reboot</span>
+            <span>// Optimized: Liquid_Brutalism</span>
+        </div>
+    </div>
+
+    <!-- MODAL 1: SYSTEM ERROR DETAILS -->
+    <div id="matrix-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[80] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-[#0A0A0A] border border-neon w-full max-w-lg shadow-[0_0_50px_rgba(204,255,0,0.1)] transform scale-95 transition-all duration-300 relative">
+            <div class="bg-neon text-black px-4 py-2 font-mono text-xs font-bold flex justify-between items-center">
+                <span>> SYSTEM_PATCH_DETAILS</span>
+                <button onclick="closeMatrixModal()" class="hover:bg-black hover:text-neon px-2 transition-colors">[CLOSE X]</button>
+            </div>
+            <div class="p-8">
+                <div class="font-mono text-[10px] text-alert mb-2" id="m-id">ERROR_CODE_01</div>
+                <h3 class="font-display text-3xl text-white mb-4" id="m-title">TITLE</h3>
+                <div class="space-y-4 font-mono text-sm text-gray-400">
+                    <div>
+                        <span class="text-white block text-xs mb-1">// THE ISSUE:</span>
+                        <p id="m-desc" class="leading-relaxed">Description...</p>
+                    </div>
+                    <div class="border-l-2 border-neon pl-4">
+                        <span class="text-neon block text-xs mb-1">// THE BLAZE FIX:</span>
+                        <p id="m-fix" class="text-white font-bold">Solution...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-white/10 bg-white/5 flex justify-end">
+                <button onclick="closeMatrixModal(); openHandshake();" class="font-mono text-xs bg-white text-black px-4 py-2 hover:bg-neon font-bold uppercase">
+                    > DEPLOY FIX
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: INITIALIZE PROJECT (FORM) -->
+    <div id="handshake-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[70] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-void border border-neon/50 w-full max-w-md relative overflow-hidden shadow-[0_0_50px_rgba(204,255,0,0.15)]">
+            <div class="bg-zinc p-3 border-b border-white/10 flex justify-between items-center">
+                <div class="font-mono text-[10px] text-neon">root@blazebit:~# sudo secure_uplink</div>
+                <button onclick="closeHandshake()" class="text-gray-500 hover:text-white font-mono text-xs">[CLOSE X]</button>
+            </div>
+            <div class="p-8">
+                <h2 class="font-display text-2xl mb-6 text-white">INITIALIZE<br><span class="text-neon">PROJECT</span></h2>
+                <form id="terminal-form" class="space-y-5 font-mono text-xs" onsubmit="return false;">
+                    <div class="group">
+                        <label class="block text-gray-500 mb-1 group-focus-within:text-neon">> PROTOCOL_NAME</label>
+                        <input type="text" placeholder="NANNA" id="form-name" class="w-full bg-[#111] border border-white/20 p-3 text-white focus:border-neon focus:outline-none uppercase placeholder:text-gray-700">
+                    </div>
+                    <div class="group">
+                        <label class="block text-gray-500 mb-1 group-focus-within:text-neon">> TELEGRAM_HANDLE</label>
+                        <input type="text" placeholder="@Jana" id="form-tg" class="w-full bg-[#111] border border-white/20 p-3 text-white focus:border-neon focus:outline-none placeholder:text-gray-700">
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-gray-500 mb-2">> ENGAGEMENT_MODEL</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer border border-white/20 p-4 text-center hover:border-neon hover:bg-white/5 transition-all">
+                                <input type="radio" name="model" value="sprint" class="hidden peer">
+                                <span class="text-gray-400 peer-checked:text-neon font-bold block">SPRINT</span>
+                                <span class="text-[9px] text-gray-600 block">(One-off)</span>
+                            </label>
+                            <label class="cursor-pointer border border-white/20 p-4 text-center hover:border-neon hover:bg-white/5 transition-all">
+                                <input type="radio" name="model" value="retainer" class="hidden peer" checked>
+                                <span class="text-gray-400 peer-checked:text-neon font-bold block">RETAINER</span>
+                                <span class="text-[9px] text-gray-600 block">(Monthly)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- SWIPE CTA -->
+                    <div class="mt-6 pt-4 border-t border-white/10">
+                        <div class="swipe-container" id="swipe-btn">
+                            <div class="swipe-text">SLIDE TO EXECUTE >>></div>
+                            <div class="swipe-track" id="swipe-track"><span class="swipe-arrow">-></span></div>
+                        </div>
+                    </div>
+                    <div class="text-[9px] text-neon space-y-2 pt-2 hidden" id="terminal-log">
+                        <!-- JS fills this -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 w-full z-40 px-4 py-3 md:px-8 md:py-4 flex justify-between items-center bg-void/80 backdrop-blur-md border-b border-white/10">
+        <div class="flex flex-col">
+            <span class="font-display font-bold text-lg tracking-tighter">BLAZEBIT</span>
+            <span class="font-mono text-[9px] text-gray-500">/// STUDIO_V_FINAL</span>
+        </div>
+        <div class="hidden md:flex items-center gap-3 font-mono text-[10px] bg-[#0A0A0A] border border-white/10 px-3 py-1.5 rounded">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-pulse-fast absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+            </span>
+            <span class="text-gray-400">BANDWIDTH:</span>
+            <span id="bandwidth-status" class="text-alert font-bold">CHECKING...</span>
+        </div>
+        <button onclick="openHandshake()" class="font-mono text-[10px] md:text-xs bg-white text-black border border-white px-5 py-2 hover:bg-neon hover:border-neon transition-colors font-bold uppercase">
+            Initialize_
+        </button>
+    </nav>
+
+    <!-- CONTENT -->
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <!-- HERO SECTION -->
+            <section class="relative min-h-screen flex flex-col justify-center px-4 md:px-12 pt-20 bg-grid-pattern bg-[length:40px_40px] overflow-hidden">
+                <!-- DYNAMIC NEON GRADIENT -->
+                <div class="neon-glow-bg"></div>
+                <!-- 3D CUBE -->
+                <div class="absolute right-[5%] md:right-[10%] top-1/2 -translate-y-1/2 opacity-40 pointer-events-none">
+                    <div class="scene"><div class="cube"><div class="cube__face cube__face--front"></div><div class="cube__face cube__face--back"></div><div class="cube__face cube__face--right"></div><div class="cube__face cube__face--left"></div><div class="cube__face cube__face--top"></div><div class="cube__face cube__face--bottom"></div></div></div>
+                </div>
+                <div class="relative z-10 w-full max-w-7xl mx-auto">
+                    <!-- SYSTEM ONLINE -->
+                    <div class="font-mono text-xs text-neon mb-6 border-l-2 border-neon pl-4 flex items-center gap-2">
+                         <span class="w-2 h-2 bg-neon rounded-full animate-pulse"></span> SYSTEM ONLINE
+                    </div>
+                    <h1 class="fluid-h1 font-display font-bold uppercase text-white leading-[0.85] tracking-tighter mix-blend-difference">
+                        Institutional<br>
+                        <span class="text-stroke">Tech.</span><br>
+                        <span class="italic text-neon">Degen</span> Cult.
+                    </h1>
+                    <div class="mt-8 max-w-xl">
+                        <p class="font-mono text-sm text-gray-400 leading-relaxed">
+                            We build the visual bridge between <span class="text-white font-bold">TVL</span> and <span class="text-white font-bold">Community</span>. 
+                            The only agency optimized for <span class="text-white">Liquid Brutalism</span>.
+                        </p>
+                    </div>
+                    <!-- START AUDIT BUTTON -->
+                    <div class="mt-12 flex items-center gap-4">
+                        <button onclick="openHandshake()" class="bg-neon text-black font-bold uppercase px-8 py-4 font-mono hover:scale-105 transition-transform shadow-[0_0_20px_rgba(204,255,0,0.3)]">
+                            START AUDIT
+                        </button>
+                    </div>
+                </div>
+                <!-- LOGO MARQUEE -->
+                <div class="absolute bottom-0 w-full border-t border-white/10 bg-black/80 backdrop-blur-sm py-6 overflow-hidden">
+                    <div class="flex gap-16 animate-marquee whitespace-nowrap opacity-40 hover:opacity-100 transition-opacity">
+                        <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/></svg><span class="font-display font-bold">ETHEREUM</span></div>
+                        <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.3 14.2l-3.3-3.3c-.9-.9-2.3-.9-3.2 0l-3.3 3.3c-.9.9-2.3.9-3.2 0l-1.8-1.8L.2 16.7c-.3.3-.3.8 0 1.1l2.3 2.3c.3.3.8.3 1.1 0l4.3-4.3c.9-.9 2.3-.9 3.2 0l3.3 3.3c.9.9 2.3.9 3.2 0l4.3-4.3c.3-.3.3-.8 0-1.1l-2.6-2.5z"/></svg><span class="font-display font-bold">SOLANA</span></div>
+                        <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/></svg><span class="font-display font-bold">BASE</span></div>
+                        <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="4" y="4" width="16" height="16"/></svg><span class="font-display font-bold">BERACHAIN</span></div>
+                        <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/></svg><span class="font-display font-bold">ETHEREUM</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 1. RECENT OUTPUT (With Red/Neon Dashboard) -->
+            <section class="py-12 bg-zinc border-b border-white/10 overflow-hidden relative">
+                <div class="absolute top-0 left-0 bg-neon text-black text-[10px] font-bold px-2 py-1 font-mono z-20">RECENT_OUTPUT</div>
+                <div class="flex w-[200%] animate-marquee-reverse hover:[animation-play-state:paused]">
+                    <div class="flex gap-4 px-2">
+                        <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden">
+                             <div class="font-display text-4xl text-gray-700 group-hover:text-neon transition-colors">UI_V4</div>
+                        </div>
+                        <!-- THE RED/NEON DASHBOARD -->
+                        <div class="w-64 h-40 bg-[#090909] border border-white/10 flex flex-col justify-center px-6 relative group overflow-hidden">
+                            <div class="w-full h-2 bg-gray-800 rounded-full mb-3 overflow-hidden"><div class="h-full w-3/4 bg-neon shadow-[0_0_10px_#CCFF00]"></div></div>
+                            <div class="w-full h-2 bg-gray-800 rounded-full mb-4 overflow-hidden"><div class="h-full w-1/2 bg-alert shadow-[0_0_10px_#FF2A00]"></div></div>
+                            <span class="font-mono text-[9px] text-gray-500 uppercase">DASHBOARD</span>
+                        </div>
+                        <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden">
+                             <div class="font-display text-4xl text-gray-700 group-hover:text-white transition-colors">RWA</div>
+                        </div>
+                        <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden">
+                            <div class="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <div class="w-12 h-12 bg-neon rounded-full blur-md opacity-50"></div>
+                            </div>
+                        </div>
+                         <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden">
+                             <div class="font-display text-4xl text-gray-700 group-hover:text-neon transition-colors">UI_V4</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. THE GLITCH -->
+            <section class="py-24 px-4 md:px-12 bg-void border-b border-white/10">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="font-display text-3xl md:text-5xl mb-8 uppercase text-white">The <span class="text-alert">Glitch.</span></h2>
+                    <p class="font-mono text-base md:text-lg text-gray-400 leading-relaxed mb-6">
+                        You are building financial rails for the world, but your visuals look like a shitcoin.
+                    </p>
+                    <p class="font-mono text-base md:text-lg text-gray-400 leading-relaxed mb-8">
+                        VCs need to see <span class="text-white font-bold">Trust</span>. Users need to feel <span class="text-white font-bold">FOMO</span>.
+                        Currently, you're broadcasting static.
+                    </p>
+                    <div class="flex gap-4 font-mono text-[10px] text-neon uppercase">
+                        <span>● Audit-Ready</span>
+                        <span>● Vector-Based</span>
+                        <span>● Algo-Optimized</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. THE UPGRADE (Slider) -->
+            <section class="py-24 px-4 md:px-12 bg-[#080808] border-b border-white/10">
+                <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+                    <div class="lg:w-1/3">
+                        <h2 class="font-display text-3xl md:text-5xl mb-6 uppercase">The <span class="text-neon">Upgrade.</span></h2>
+                        <p class="font-mono text-sm text-gray-400 mb-6">Drag the slider. See the difference between a generic template and a bespoke Vector System.</p>
+                        <div class="flex gap-4 font-mono text-[10px] uppercase"><div class="text-gray-600">Left: Generic</div><div class="text-neon">Right: BlazeBit</div></div>
+                    </div>
+                    <div class="lg:w-2/3 w-full">
+                        <div class="comparison-container" id="comparison-slider">
+                            <div class="comparison-image visual-good"><div class="text-center"><div class="font-display text-6xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">VECTOR</div><div class="font-mono text-xs text-neon tracking-[0.5em] mt-2">INSTITUTIONAL GRADE</div></div></div>
+                            <div class="comparison-overlay visual-bad" id="overlay-div"><div class="text-center"><div class="font-display text-6xl text-gray-500">PIXEL</div><div class="font-mono text-xs text-red-500 tracking-widest mt-2">LOW QUALITY ASSET</div></div></div>
+                            <div class="handle" id="slider-handle"><span class="text-black"><></span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. SYSTEM PATCH (7 ERROR CODES) -->
+            <section class="py-24 px-4 md:px-12 bg-void">
+                <div class="border-b border-white/20 pb-6 mb-12 flex justify-between items-end">
+                    <h2 class="font-display text-3xl md:text-5xl uppercase">System <span class="text-neon">Patch</span></h2>
+                    <span class="font-mono text-xs text-gray-500 hidden md:inline-block">HOVER TO DECRYPT</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="matrix-grid"></div>
+            </section>
+
+            <!-- 5. READY TO UPGRADE -->
+            <section id="cta" class="py-32 px-4 md:px-12 bg-[#050505] border-t border-white/20">
+                <div class="max-w-5xl mx-auto bg-[#0A0A0A] border border-white/20 p-8 md:p-16 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-neon/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                    <div class="font-mono text-xs text-neon mb-6">root@blazebit:~# sudo execute_growth</div>
+                    <h2 class="font-display text-4xl md:text-7xl text-white mb-8 leading-tight">
+                        READY TO <br><span class="text-neon">UPGRADE?</span>
+                    </h2>
+                    <button onclick="openHandshake()" class="w-full bg-neon text-black font-bold uppercase p-8 hover:bg-white transition-colors flex justify-between items-center group relative z-10 shadow-[0_0_30px_rgba(204,255,0,0.2)]">
+                        <span class="tracking-widest text-lg font-mono">> INITIALIZE HANDSHAKE</span>
+                        <span class="group-hover:translate-x-4 transition-transform font-mono text-lg">_ENTER</span>
+                    </button>
+                    <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 font-mono text-[10px] text-gray-500 uppercase">
+                        <div>Avg Response: <span class="text-white">14m</span></div>
+                        <div>Ops Status: <span class="text-neon">Active</span></div>
+                        <div>Slots Left: <span class="text-alert animate-pulse">1</span></div>
+                        <div>Gas: <span class="text-white">12 gwei</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="bg-black py-12 px-4 md:px-12 border-t border-white/10 font-mono text-[10px] text-gray-600 uppercase">
+                <div class="flex flex-col md:flex-row justify-between gap-6">
+                    <div>BlazeBit.Studio /// Based in the Cloud</div>
+                    <div class="flex gap-4">
+                        <a href="https://twitter.com/blazebit98" target="_blank" class="hover:text-neon">@blazebit98 (X)</a>
+                        <a href="https://t.me/BlazeBit98" target="_blank" class="hover:text-neon">@BlazeBit98 (TG)</a>
+                    </div>
+                    <div>© 2026 Protocol</div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script>
+        // --- 1. DATA SOURCE ---
+        const matrixData = [
+            { id: "01", cat: "BRAND", pain: "Pixel Art Hangover", fix: "Vector Modernization", desc: "Old pixel assets look like 2021 NFT projects.", score: 10 },
+            { id: "02", cat: "BRAND", pain: "Brand Safety Risk", fix: "Sanitized Protocols", desc: "Using Pepe or Wojak is a liability. We design sanitized versions.", score: 10 },
+            { id: "03", cat: "EDU", pain: "Complexity Gap", fix: "Visual Storyboards", desc: "Users don't understand yield mechanics. We use 2-panel visuals.", score: 9 },
+            { id: "04", cat: "EDU", pain: "Leverage Fear", fix: "Safety Flow Charts", desc: "5x Leverage sounds like gambling. We create schematics showing safety.", score: 8 },
+            { id: "05", cat: "VELOCITY", pain: "Market Dump Chaos", fix: "Emergency Ops Templates", desc: "When markets crash, we ship assets in 15 mins.", score: 10 },
+            { id: "06", cat: "BRAND", pain: "Generic Templates", fix: "Custom IP Protocol", desc: "Canva templates signal 'Low Effort'. We draw everything from scratch.", score: 8 },
+            { id: "07", cat: "OPS", pain: "Slow Turnaround", fix: "The Newsroom Model", desc: "No quotes. No waiting. We ship within 24 hours.", score: 10 }
+        ];
+
+        // --- 2. RENDER MATRIX ---
+        const grid = document.getElementById('matrix-grid');
+        matrixData.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = "glitch-wrapper border border-white/10 p-6 bg-[#080808] hover:bg-white/5 hover:border-neon transition-all cursor-pointer h-48 flex flex-col justify-between group";
+            card.onclick = () => openMatrixModal(index);
+            card.innerHTML = `
+                <div class="flex justify-between mb-2">
+                    <span class="font-mono text-[10px] text-alert group-hover:hidden">[ERROR_0${index+1}]</span>
+                    <span class="font-mono text-[10px] text-neon hidden group-hover:inline">[PATCHED]</span>
+                    <span class="font-mono text-[10px] text-gray-600">/${item.cat}</span>
+                </div>
+                <h3 class="font-display text-xl text-gray-400 group-hover:text-white transition-colors uppercase">${item.pain}</h3>
+                <div class="border-t border-white/10 pt-2 mt-2">
+                    <p class="font-mono text-xs text-gray-500 group-hover:text-neon glitch-text transition-colors uppercase">
+                        > ${item.fix}
+                    </p>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // --- 3. MODAL LOGIC ---
+        const mModal = document.getElementById('matrix-modal');
+        function openMatrixModal(index) {
+            const d = matrixData[index];
+            document.getElementById('m-id').innerText = `ERROR_CODE_0${index+1}`;
+            document.getElementById('m-title').innerText = d.pain;
+            document.getElementById('m-desc').innerText = d.desc;
+            document.getElementById('m-fix').innerText = d.fix;
+            mModal.classList.remove('hidden');
+            setTimeout(() => { mModal.classList.remove('opacity-0'); mModal.children[0].classList.remove('scale-95'); mModal.children[0].classList.add('scale-100'); }, 10);
+        }
+        function closeMatrixModal() {
+            mModal.classList.add('opacity-0');
+            mModal.children[0].classList.remove('scale-100'); mModal.children[0].classList.add('scale-95');
+            setTimeout(() => mModal.classList.add('hidden'), 300);
+        }
+
+        const hModal = document.getElementById('handshake-modal');
+        window.openHandshake = () => { hModal.classList.remove('hidden'); setTimeout(() => hModal.classList.remove('opacity-0'), 10); };
+        window.closeHandshake = () => { hModal.classList.add('opacity-0'); setTimeout(() => hModal.classList.add('hidden'), 300); };
+
+        // --- 4. SLIDER LOGIC ---
+        const slider = document.getElementById('comparison-slider');
+        const overlay = document.getElementById('overlay-div');
+        const handle = document.getElementById('slider-handle');
+        let isDragging = false;
+        const moveSlider = (x) => {
+            const rect = slider.getBoundingClientRect();
+            let pos = ((x - rect.left) / rect.width) * 100;
+            if(pos < 0) pos=0; if(pos > 100) pos=100;
+            overlay.style.width = pos + "%";
+            handle.style.left = pos + "%";
+        };
+        slider.addEventListener('mousedown', () => isDragging = true);
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('mousemove', (e) => { if(isDragging) moveSlider(e.clientX); });
+        slider.addEventListener('touchstart', () => isDragging = true);
+        window.addEventListener('touchend', () => isDragging = false);
+        window.addEventListener('touchmove', (e) => { if(isDragging) moveSlider(e.touches[0].clientX); });
+
+        // --- 5. SCARCITY ---
+        const bandEl = document.getElementById('bandwidth-status');
+        if(localStorage.getItem('blaze_vFinal')) {
+            bandEl.innerText = "CRITICAL (1 SLOT)"; bandEl.classList.add('animate-pulse');
+        } else {
+            bandEl.innerText = "HIGH (3 SLOTS)";
+            setTimeout(() => {
+                bandEl.innerText = "LOW (1 SLOT)"; bandEl.classList.add('animate-pulse');
+                localStorage.setItem('blaze_vFinal', 'true');
+            }, 5000);
+        }
+
+        // --- 6. SWIPE TO MAILTO ---
+        const sTrack = document.getElementById('swipe-track');
+        const sCont = document.getElementById('swipe-btn');
+        let sDragging = false; let sStartX; let sSubmitted = false;
+
+        sTrack.addEventListener('mousedown', (e) => { if(!sSubmitted) { sDragging=true; sStartX=e.clientX; sTrack.style.transition='none'; }});
+        sTrack.addEventListener('touchstart', (e) => { if(!sSubmitted) { sDragging=true; sStartX=e.touches[0].clientX; sTrack.style.transition='none'; }});
+        window.addEventListener('mouseup', endSwipe); window.addEventListener('touchend', endSwipe);
+        window.addEventListener('mousemove', moveSwipe); window.addEventListener('touchmove', moveSwipe);
+
+        function moveSwipe(e) {
+            if(!sDragging || sSubmitted) return;
+            let cx = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            let move = cx - sStartX;
+            let max = sCont.offsetWidth - sTrack.offsetWidth;
+            if(move > 0 && move <= max) sTrack.style.transform = `translateX(${move}px)`;
+            if(move >= max - 5) { 
+                sSubmitted=true; sDragging=false; 
+                sTrack.style.transform=`translateX(${max}px)`; sTrack.classList.add('swipe-complete'); sTrack.innerHTML="SENT!";
+                
+                // Trigger Text Animation Sequence
+                const log = document.getElementById('terminal-log');
+                const pName = document.getElementById('form-name').value;
+                const pTg = document.getElementById('form-tg').value;
+                log.classList.remove('hidden');
+                
+                const msgs = ["> ENCRYPTING DATA...", "> ESTABLISHING UPLINK...", "> PACKET SENT."];
+                let i = 0;
+                const logInt = setInterval(() => {
+                    if(i >= msgs.length) { 
+                        clearInterval(logInt); 
+                        // OPEN MAIL APP
+                        window.location.href = `mailto:blazebit98@gmail.com?subject=New%20Project%3A%20${pName}&body=Protocol%3A%20${pName}%0ATelegram%3A%20${pTg}%0A%0AWe%20are%20ready%20to%20upgrade.`;
+                        return; 
+                    }
+                    const div = document.createElement('div'); div.innerText = msgs[i]; log.appendChild(div); i++;
+                }, 600);
+            }
+        }
+        function endSwipe() {
+            if(sSubmitted) return;
+            sDragging = false; sTrack.style.transition='transform 0.3s'; sTrack.style.transform='translateX(0)';
+        }
+
+        // --- 7. CURSOR & LOAD ---
+        window.addEventListener('load', () => {
+            let count = 0; const c = document.getElementById('load-count'); const l = document.getElementById('loader');
+            const int = setInterval(() => { count+=5; if(count>100) count=100; c.innerText=(count<10?`0${count}`:count); if(count===100){clearInterval(int); setTimeout(()=>l.style.transform='translateY(-100%)',400);} }, 20);
+        });
+        const lenis = new Lenis({duration: 1.2, smooth: true});
+        function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // Hyper Visual Pointer (Lag Effect)
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        if (window.matchMedia("(hover: hover)").matches) {
+            window.addEventListener('mousemove', (e) => {
+                dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+                outline.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 500, fill: "forwards" });
+            });
+            document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
+                el.addEventListener('mouseenter', () => { outline.style.width='60px'; outline.style.height='60px'; outline.style.background='rgba(255,255,255,0.1)'; });
+                el.addEventListener('mouseleave', () => { outline.style.width='40px'; outline.style.height='40px'; outline.style.background='transparent'; });
+            });
+        }
+    </script>
+</body>
+</html>
