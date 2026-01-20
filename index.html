@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BLAZEBIT | DEFI ARCHITECTS</title>
+    <title>BLAZEBIT | DEFI GROWTH ENGINE</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,7 +34,6 @@
                     animation: {
                         'marquee': 'marquee 20s linear infinite',
                         'marquee-reverse': 'marqueeReverse 20s linear infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
@@ -43,32 +42,17 @@
     </script>
 
     <style>
+        :root { --cursor-size: 20px; }
         body { background-color: #050505; color: #F0F0F0; cursor: none; overflow-x: hidden; }
         
-        /* 1. HYPER VISUAL POINTER (Pony Style) */
-        .cursor-dot, .cursor-outline {
-            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 9999;
-        }
-        .cursor-dot {
-            width: 8px; height: 8px; background-color: #CCFF00; border-radius: 50%;
-        }
-        .cursor-outline {
-            width: 40px; height: 40px; border: 1px solid rgba(204, 255, 0, 0.5); border-radius: 50%;
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-        }
+        /* 1. SENSORY & POINTER */
+        .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 9999; }
+        .cursor-dot { width: 8px; height: 8px; background-color: #CCFF00; border-radius: 50%; }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(204, 255, 0, 0.5); border-radius: 50%; transition: width 0.2s, height 0.2s, background-color 0.2s; }
 
-        /* 2. DYNAMIC NEON GRADIENT */
-        .neon-glow-bg {
-            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(204, 255, 0, 0.15) 0%, transparent 60%);
-            animation: pulse-glow 5s ease-in-out infinite alternate;
-            pointer-events: none; z-index: 0;
-        }
-        @keyframes pulse-glow {
-            0% { opacity: 0.5; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1.1); }
-        }
+        /* NEON GLOW */
+        .neon-glow-bg { position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: radial-gradient(circle at 50% 50%, rgba(204, 255, 0, 0.15) 0%, transparent 60%); animation: pulse-glow 5s ease-in-out infinite alternate; pointer-events: none; z-index: 0; }
+        @keyframes pulse-glow { 0% { opacity: 0.5; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.1); } }
 
         /* UTILS */
         .fluid-h1 { font-size: clamp(2.5rem, 9vw, 8rem); line-height: 0.85; letter-spacing: -0.04em; }
@@ -83,17 +67,35 @@
         .scene { width: 100px; height: 100px; perspective: 400px; }
         .cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: rotateCube 8s infinite linear; }
         .cube__face { position: absolute; width: 100px; height: 100px; border: 2px solid #CCFF00; opacity: 0.3; background: rgba(204, 255, 0, 0.05); }
-        .cube__face--front  { transform: rotateY(  0deg) translateZ(50px); }
-        .cube__face--right  { transform: rotateY( 90deg) translateZ(50px); }
-        .cube__face--back   { transform: rotateY(180deg) translateZ(50px); }
-        .cube__face--left   { transform: rotateY(-90deg) translateZ(50px); }
-        .cube__face--top    { transform: rotateX( 90deg) translateZ(50px); }
-        .cube__face--bottom { transform: rotateX(-90deg) translateZ(50px); }
+        .cube__face--front { transform: rotateY(0deg) translateZ(50px); } .cube__face--right { transform: rotateY(90deg) translateZ(50px); } .cube__face--back { transform: rotateY(180deg) translateZ(50px); } .cube__face--left { transform: rotateY(-90deg) translateZ(50px); } .cube__face--top { transform: rotateX(90deg) translateZ(50px); } .cube__face--bottom { transform: rotateX(-90deg) translateZ(50px); }
         @keyframes rotateCube { 0% { transform: rotateX(0deg) rotateY(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
 
-        /* GLITCH HOVER */
-        .glitch-wrapper:hover .glitch-text { color: #CCFF00; text-shadow: 2px 0 #FF2A00, -2px 0 #00E5FF; }
-        .glitch-wrapper:hover { border-color: #CCFF00; background: rgba(204,255,0,0.02); }
+        /* OVERLAYS */
+        .metric-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.95); border: 1px solid #CCFF00;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.2s ease; backdrop-filter: blur(5px);
+        }
+        .group:hover .metric-overlay { opacity: 1; }
+
+        /* LIVE TERMINAL */
+        .live-terminal {
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 10px; 
+            line-height: 1.6; 
+            color: #CCFF00;
+            height: 120px; 
+            overflow: hidden; 
+            position: relative;
+            text-transform: uppercase;
+            padding-left: 10px;
+            border-left: 2px solid #CCFF00;
+        }
+        .live-terminal::before {
+            content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 10;
+        }
 
         /* SLIDER & SWIPE */
         .comparison-container { position: relative; width: 100%; height: 400px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
@@ -102,11 +104,24 @@
         .handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: #CCFF00; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; cursor: ew-resize; z-index: 10; box-shadow: 0 0 15px #CCFF00; }
         
         .swipe-container { position: relative; width: 100%; height: 60px; background: #111; border: 1px solid #333; overflow: hidden; border-radius: 4px; user-select: none; }
-        .swipe-text { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: bold; letter-spacing: 2px; color: #555; pointer-events: none; z-index: 1; }
+        .swipe-text { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: bold; letter-spacing: 2px; color: #555; pointer-events: none; z-index: 1; transition: opacity 0.3s; }
         .swipe-track { position: absolute; top: 0; bottom: 0; left: 0; background: #CCFF00; width: 60px; display: flex; align-items: center; justify-content: center; cursor: grab; z-index: 2; transition: width 0.1s; }
         .swipe-complete { background: #CCFF00 !important; width: 100% !important; transition: width 0.3s ease !important; }
 
-        /* VISUAL ASSETS */
+        /* DYNAMIC ISLAND (MOBILE) */
+        .dynamic-island {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); 
+            width: 90%; max-width: 400px;
+            background: rgba(20, 20, 20, 0.9); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px; padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .dynamic-island.visible { transform: translateX(-50%) translateY(0); }
+        .dynamic-island:active { transform: translateX(-50%) scale(0.98); }
+        
         .visual-bad { background: repeating-linear-gradient(45deg, #111 0px, #111 10px, #222 10px, #222 20px); filter: pixelate(10px); display: flex; align-items: center; justify-content: center; }
         .visual-good { background: radial-gradient(circle at 50% 50%, rgba(204,255,0,0.1) 0%, transparent 50%), linear-gradient(to right, #050505, #111); background-size: 20px 20px; display: flex; align-items: center; justify-content: center; }
     </style>
@@ -117,6 +132,19 @@
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-outline hidden md:block"></div>
 
+    <!-- DYNAMIC ISLAND (MOBILE) -->
+    <div id="mobile-dock" class="dynamic-island md:hidden">
+        <a href="#" class="text-gray-400 hover:text-white p-2" onclick="window.scrollTo(0,0); playSound('click')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        </a>
+        <button onclick="openHandshake(); playSound('click')" class="bg-neon text-black font-bold text-xs px-6 py-2 rounded-full hover:scale-105 transition-transform">
+            START AUDIT
+        </button>
+        <a href="https://twitter.com/blazebit98" target="_blank" class="text-gray-400 hover:text-white p-2" onclick="playSound('click')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+    </div>
+
     <!-- LOADER -->
     <div id="loader" class="fixed inset-0 bg-neon z-[100] flex flex-col justify-end p-6 transition-transform duration-700 ease-in-out">
         <div class="font-display text-[15vw] font-bold text-void leading-none tracking-tighter">
@@ -124,12 +152,12 @@
         </div>
         <div class="border-t border-black w-full pt-2 flex justify-between font-mono text-xs text-black font-bold uppercase">
             <span>// System: Reboot</span>
-            <span>// Optimized: Liquid_Brutalism</span>
+            <span>// Terminal: Online</span>
         </div>
     </div>
 
     <!-- MODAL 1: SYSTEM ERROR DETAILS -->
-    <div id="matrix-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[80] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div id="matrix-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[120] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
         <div class="bg-[#0A0A0A] border border-neon w-full max-w-lg shadow-[0_0_50px_rgba(204,255,0,0.1)] transform scale-95 transition-all duration-300 relative">
             <div class="bg-neon text-black px-4 py-2 font-mono text-xs font-bold flex justify-between items-center">
                 <span>> SYSTEM_PATCH_DETAILS</span>
@@ -139,76 +167,102 @@
                 <div class="font-mono text-[10px] text-alert mb-2" id="m-id">ERROR_CODE_01</div>
                 <h3 class="font-display text-3xl text-white mb-4" id="m-title">TITLE</h3>
                 <div class="space-y-4 font-mono text-sm text-gray-400">
-                    <div>
-                        <span class="text-white block text-xs mb-1">// THE ISSUE:</span>
-                        <p id="m-desc" class="leading-relaxed">Description...</p>
-                    </div>
-                    <div class="border-l-2 border-neon pl-4">
-                        <span class="text-neon block text-xs mb-1">// THE BLAZE FIX:</span>
-                        <p id="m-fix" class="text-white font-bold">Solution...</p>
-                    </div>
+                    <div><span class="text-white block text-xs mb-1">// THE ISSUE:</span><p id="m-desc" class="leading-relaxed">...</p></div>
+                    <div class="border-l-2 border-neon pl-4"><span class="text-neon block text-xs mb-1">// THE BLAZE FIX:</span><p id="m-fix" class="text-white font-bold">...</p></div>
                 </div>
             </div>
             <div class="p-4 border-t border-white/10 bg-white/5 flex justify-end">
-                <button onclick="closeMatrixModal(); openHandshake();" class="font-mono text-xs bg-white text-black px-4 py-2 hover:bg-neon font-bold uppercase">
+                <button onclick="closeMatrixModal(); openHandshake(); playSound('click')" class="font-mono text-xs bg-white text-black px-4 py-2 hover:bg-neon font-bold uppercase hover-sound">
                     > DEPLOY FIX
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 2: INITIALIZE PROJECT (FORM) -->
-    <div id="handshake-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[70] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-void border border-neon/50 w-full max-w-md relative overflow-hidden shadow-[0_0_50px_rgba(204,255,0,0.15)]">
-            <div class="bg-zinc p-3 border-b border-white/10 flex justify-between items-center">
+    <!-- MODAL 2: INITIALIZE PROJECT (SMART FORM) -->
+    <div id="handshake-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[130] hidden flex flex-col items-center justify-center md:justify-center justify-end p-0 md:p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-void border border-neon/50 w-full md:max-w-md max-h-[85vh] overflow-y-auto relative shadow-[0_0_50px_rgba(204,255,0,0.15)] flex flex-col">
+            <div class="bg-zinc p-3 border-b border-white/10 flex justify-between items-center shrink-0">
                 <div class="font-mono text-[10px] text-neon">root@blazebit:~# sudo secure_uplink</div>
-                <button onclick="closeHandshake()" class="text-gray-500 hover:text-white font-mono text-xs">[CLOSE X]</button>
+                <button onclick="closeHandshake()" class="text-gray-500 hover:text-white font-mono text-xs hover-sound">[CLOSE X]</button>
             </div>
-            <div class="p-8">
-                <h2 class="font-display text-2xl mb-6 text-white">INITIALIZE<br><span class="text-neon">PROJECT</span></h2>
-                <form id="terminal-form" class="space-y-5 font-mono text-xs" onsubmit="return false;">
+            <div class="p-6 md:p-8 flex-1">
+                <h2 class="font-display text-2xl mb-4 text-white shrink-0">INITIALIZE<br><span class="text-neon">PROJECT</span></h2>
+                
+                <!-- WEB3FORMS INTEGRATION -->
+                <form id="terminal-form" action="https://api.web3forms.com/submit" method="POST" class="space-y-4 font-mono text-xs" onsubmit="return false;">
+                    
+                    <input type="hidden" name="access_key" value="3306373d-9b48-454f-9137-520f141faa43">
+                    
                     <div class="group">
-                        <label class="block text-gray-500 mb-1 group-focus-within:text-neon">> PROTOCOL_NAME</label>
-                        <input type="text" placeholder="NANNA" id="form-name" class="w-full bg-[#111] border border-white/20 p-3 text-white focus:border-neon focus:outline-none uppercase placeholder:text-gray-700">
+                        <label class="block text-gray-500 mb-1 group-focus-within:text-white">> PROTOCOL_NAME</label>
+                        <input type="text" name="protocol" id="form-name" required class="w-full bg-[#111] border border-white/20 p-3 text-white focus:border-white focus:outline-none uppercase hover-sound">
                     </div>
                     <div class="group">
-                        <label class="block text-gray-500 mb-1 group-focus-within:text-neon">> TELEGRAM_HANDLE</label>
-                        <input type="text" placeholder="@Jana" id="form-tg" class="w-full bg-[#111] border border-white/20 p-3 text-white focus:border-neon focus:outline-none placeholder:text-gray-700">
+                        <label class="block text-gray-500 mb-1 group-focus-within:text-white">> TELEGRAM_HANDLE</label>
+                        <input type="text" name="telegram" id="form-tg" required class="w-full bg-[#111] border border-white/20 p-3 text-white focus:border-white focus:outline-none hover-sound">
                     </div>
-                    <div class="pt-2">
+                    
+                    <!-- ENGAGEMENT LOGIC -->
+                    <div class="pt-2 shrink-0">
                         <label class="block text-gray-500 mb-2">> ENGAGEMENT_MODEL</label>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="cursor-pointer border border-white/20 p-4 text-center hover:border-neon hover:bg-white/5 transition-all">
-                                <input type="radio" name="model" value="sprint" class="hidden peer">
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <label class="cursor-pointer border border-white/20 p-3 text-center hover:border-neon hover:bg-white/5 transition-all hover-sound">
+                                <input type="radio" name="model" value="sprint" class="hidden peer" onchange="togglePricing('sprint')">
                                 <span class="text-gray-400 peer-checked:text-neon font-bold block">SPRINT</span>
                                 <span class="text-[9px] text-gray-600 block">(One-off)</span>
                             </label>
-                            <label class="cursor-pointer border border-white/20 p-4 text-center hover:border-neon hover:bg-white/5 transition-all">
-                                <input type="radio" name="model" value="retainer" class="hidden peer" checked>
+                            <label class="cursor-pointer border border-white/20 p-3 text-center hover:border-neon hover:bg-white/5 transition-all hover-sound">
+                                <input type="radio" name="model" value="retainer" class="hidden peer" onchange="togglePricing('retainer')">
                                 <span class="text-gray-400 peer-checked:text-neon font-bold block">RETAINER</span>
                                 <span class="text-[9px] text-gray-600 block">(Monthly)</span>
                             </label>
                         </div>
+
+                        <!-- Hidden Pricing Options -->
+                        <div id="pricing-options" class="hidden grid-cols-3 gap-2 mb-3">
+                            <label class="cursor-pointer border border-white/10 p-2 text-center hover:border-neon hover:bg-white/5 transition-all">
+                                <input type="radio" name="price" value="500" class="hidden peer" onchange="updateSlots(500)">
+                                <span class="text-gray-500 peer-checked:text-white block text-[10px]">$500</span>
+                            </label>
+                            <label class="cursor-pointer border border-white/10 p-2 text-center hover:border-neon hover:bg-white/5 transition-all">
+                                <input type="radio" name="price" value="1500" class="hidden peer" onchange="updateSlots(1500)">
+                                <span class="text-gray-500 peer-checked:text-white block text-[10px]">$1500</span>
+                            </label>
+                            <label class="cursor-pointer border border-white/10 p-2 text-center hover:border-neon hover:bg-white/5 transition-all">
+                                <input type="radio" name="price" value="4000" class="hidden peer" onchange="updateSlots(4000)">
+                                <span class="text-gray-500 peer-checked:text-white block text-[10px]">$4000</span>
+                            </label>
+                        </div>
+                        
+                        <!-- Availability Text (SCARCITY LOGIC) -->
+                        <div id="slot-display" class="text-[9px] text-neon min-h-[16px] flex flex-wrap items-center gap-2"></div>
                     </div>
+
+                    <!-- DESCRIPTION BOX -->
+                    <div class="group">
+                        <label class="block text-gray-500 mb-1 group-focus-within:text-white">> MISSION_BRIEF</label>
+                        <textarea name="message" id="form-msg" rows="3" required class="w-full bg-[#111] border border-white/20 p-3 text-white focus:border-white focus:outline-none hover-sound" placeholder="Describe the objective..."></textarea>
+                    </div>
+                    
                     <!-- SWIPE CTA -->
-                    <div class="mt-6 pt-4 border-t border-white/10">
+                    <div class="mt-4 pt-4 border-t border-white/10 shrink-0">
                         <div class="swipe-container" id="swipe-btn">
-                            <div class="swipe-text">SLIDE TO EXECUTE >>></div>
+                            <div class="swipe-text" id="swipe-text">SLIDE TO EXECUTE >>></div>
                             <div class="swipe-track" id="swipe-track"><span class="swipe-arrow">-></span></div>
                         </div>
                     </div>
-                    <div class="text-[9px] text-neon space-y-2 pt-2 hidden" id="terminal-log">
-                        <!-- JS fills this -->
-                    </div>
+                    
+                    <div class="text-[9px] text-neon space-y-1 pt-2 hidden" id="terminal-log"></div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- NAV -->
+    <!-- NAV (DESKTOP) -->
     <nav class="fixed top-0 w-full z-40 px-4 py-3 md:px-8 md:py-4 flex justify-between items-center bg-void/80 backdrop-blur-md border-b border-white/10">
         <div class="flex flex-col">
-            <span class="font-display font-bold text-lg tracking-tighter">BLAZEBIT</span>
+            <span class="font-display font-bold text-lg tracking-tighter hover-sound">BLAZEBIT</span>
             <span class="font-mono text-[9px] text-gray-500">/// STUDIO_V_FINAL</span>
         </div>
         <div class="hidden md:flex items-center gap-3 font-mono text-[10px] bg-[#0A0A0A] border border-white/10 px-3 py-1.5 rounded">
@@ -217,11 +271,9 @@
               <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
             </span>
             <span class="text-gray-400">BANDWIDTH:</span>
-            <span id="bandwidth-status" class="text-alert font-bold">CHECKING...</span>
+            <span id="bandwidth-status" class="text-alert font-bold">CALCULATING...</span>
         </div>
-        <button onclick="openHandshake()" class="font-mono text-[10px] md:text-xs bg-white text-black border border-white px-5 py-2 hover:bg-neon hover:border-neon transition-colors font-bold uppercase">
-            Initialize_
-        </button>
+        <div class="w-10"></div> 
     </nav>
 
     <!-- CONTENT -->
@@ -230,7 +282,6 @@
 
             <!-- HERO SECTION -->
             <section class="relative min-h-screen flex flex-col justify-center px-4 md:px-12 pt-20 bg-grid-pattern bg-[length:40px_40px] overflow-hidden">
-                <!-- DYNAMIC NEON GRADIENT -->
                 <div class="neon-glow-bg"></div>
                 <!-- 3D CUBE -->
                 <div class="absolute right-[5%] md:right-[10%] top-1/2 -translate-y-1/2 opacity-40 pointer-events-none">
@@ -252,64 +303,81 @@
                             The only agency optimized for <span class="text-white">Liquid Brutalism</span>.
                         </p>
                     </div>
-                    <!-- START AUDIT BUTTON -->
+                    <!-- START AUDIT BUTTON (Target for Observer) -->
                     <div class="mt-12 flex items-center gap-4">
-                        <button onclick="openHandshake()" class="bg-neon text-black font-bold uppercase px-8 py-4 font-mono hover:scale-105 transition-transform shadow-[0_0_20px_rgba(204,255,0,0.3)]">
+                        <button id="hero-cta" onclick="openHandshake(); playSound('click')" class="bg-neon text-black font-bold uppercase px-8 py-4 font-mono hover:scale-105 transition-transform shadow-[0_0_20px_rgba(204,255,0,0.3)] hover-sound">
                             START AUDIT
                         </button>
                     </div>
                 </div>
-                <!-- LOGO MARQUEE -->
-                <div class="absolute bottom-0 w-full border-t border-white/10 bg-black/80 backdrop-blur-sm py-6 overflow-hidden">
-                    <div class="flex gap-16 animate-marquee whitespace-nowrap opacity-40 hover:opacity-100 transition-opacity">
+                
+                <!-- LOGO MARQUEE + VC TRUST -->
+                <div class="absolute bottom-0 w-full border-t border-white/10 bg-black/80 backdrop-blur-sm pt-6 pb-2 overflow-hidden flex flex-col">
+                    <div class="flex gap-16 animate-marquee whitespace-nowrap opacity-40 hover:opacity-100 transition-opacity mb-2">
                         <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/></svg><span class="font-display font-bold">ETHEREUM</span></div>
                         <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.3 14.2l-3.3-3.3c-.9-.9-2.3-.9-3.2 0l-3.3 3.3c-.9.9-2.3.9-3.2 0l-1.8-1.8L.2 16.7c-.3.3-.3.8 0 1.1l2.3 2.3c.3.3.8.3 1.1 0l4.3-4.3c.9-.9 2.3-.9 3.2 0l3.3 3.3c.9.9 2.3.9 3.2 0l4.3-4.3c.3-.3.3-.8 0-1.1l-2.6-2.5z"/></svg><span class="font-display font-bold">SOLANA</span></div>
-                        <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/></svg><span class="font-display font-bold">BASE</span></div>
-                        <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="4" y="4" width="16" height="16"/></svg><span class="font-display font-bold">BERACHAIN</span></div>
+                        <div class="flex items-center gap-2"><span class="font-display font-bold text-white">BERACHAIN</span></div>
+                        <div class="flex items-center gap-2"><span class="font-display font-bold text-white">HYPERLIQUID</span></div>
+                        <!-- Repeats -->
                         <div class="flex items-center gap-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/></svg><span class="font-display font-bold">ETHEREUM</span></div>
+                    </div>
+                    <!-- PINK TAPE FIX -->
+                    <div class="w-full bg-neon py-2 text-center border-t border-black/20 overflow-hidden">
+                        <div class="animate-marquee whitespace-nowrap font-mono text-[9px] text-black font-bold uppercase tracking-widest">
+                            Systems Compliant With: Paradigm // a16z // Dragonfly Standards /// Systems Compliant With: Paradigm // a16z // Dragonfly Standards ///
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 1. RECENT OUTPUT (With Red/Neon Dashboard) -->
+            <!-- LIVE TRENDS (FIXED) -->
+            <section class="border-b border-white/10 bg-[#0A0A0A] px-4 md:px-12 py-6 min-h-[150px] flex items-center" id="terminal-section">
+                <div class="live-terminal w-full" id="trend-terminal">
+                    <!-- JS Fills this on Scroll -->
+                </div>
+            </section>
+
+            <!-- RECENT OUTPUT -->
             <section class="py-12 bg-zinc border-b border-white/10 overflow-hidden relative">
                 <div class="absolute top-0 left-0 bg-neon text-black text-[10px] font-bold px-2 py-1 font-mono z-20">RECENT_OUTPUT</div>
                 <div class="flex w-[200%] animate-marquee-reverse hover:[animation-play-state:paused]">
                     <div class="flex gap-4 px-2">
-                        <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden">
+                        <!-- Card 1 -->
+                        <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden cursor-pointer hover-sound" onclick="openMatrixModal(0)">
                              <div class="font-display text-4xl text-gray-700 group-hover:text-neon transition-colors">UI_V4</div>
+                             <div class="metric-overlay"><span class="font-mono text-neon font-bold">+45% CTR</span><span class="text-[9px] uppercase text-white">Tap to Inspect</span></div>
                         </div>
-                        <!-- THE RED/NEON DASHBOARD -->
-                        <div class="w-64 h-40 bg-[#090909] border border-white/10 flex flex-col justify-center px-6 relative group overflow-hidden">
-                            <div class="w-full h-2 bg-gray-800 rounded-full mb-3 overflow-hidden"><div class="h-full w-3/4 bg-neon shadow-[0_0_10px_#CCFF00]"></div></div>
-                            <div class="w-full h-2 bg-gray-800 rounded-full mb-4 overflow-hidden"><div class="h-full w-1/2 bg-alert shadow-[0_0_10px_#FF2A00]"></div></div>
-                            <span class="font-mono text-[9px] text-gray-500 uppercase">DASHBOARD</span>
-                        </div>
-                        <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden">
-                             <div class="font-display text-4xl text-gray-700 group-hover:text-white transition-colors">RWA</div>
-                        </div>
-                        <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden">
-                            <div class="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <div class="w-12 h-12 bg-neon rounded-full blur-md opacity-50"></div>
+                        
+                        <!-- Card 2: LIVE DASHBOARD -->
+                        <div class="w-64 h-40 bg-[#090909] border border-white/10 flex flex-col justify-center px-6 relative group overflow-hidden cursor-pointer hover-sound">
+                            <div class="flex justify-between items-end mb-2">
+                                <div class="text-neon font-mono text-xl font-bold tracking-tighter flex">$<span id="live-tvl">12.4</span>M</div>
+                                <div class="text-[9px] text-gray-500 mb-1">TVL</div>
                             </div>
+                            <div class="w-full h-1 bg-gray-800 rounded-full mb-1 overflow-hidden"><div class="h-full w-3/4 bg-neon shadow-[0_0_10px_#CCFF00]"></div></div>
+                            <div class="flex justify-between items-end mb-1 mt-2">
+                                <div class="text-white font-mono text-sm flex"><span id="live-apy">8.2</span>%</div>
+                                <div class="text-[9px] text-gray-500 mb-1">APY</div>
+                            </div>
+                            <div class="w-full h-1 bg-gray-800 rounded-full overflow-hidden"><div class="h-full w-1/2 bg-alert shadow-[0_0_10px_#FF2A00]"></div></div>
+                            <div class="metric-overlay"><span class="font-mono text-neon font-bold">REAL-TIME</span><span class="text-[9px] uppercase text-white">Visuals</span></div>
                         </div>
-                         <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden">
-                             <div class="font-display text-4xl text-gray-700 group-hover:text-neon transition-colors">UI_V4</div>
+
+                        <!-- Card 3 -->
+                        <div class="w-64 h-40 bg-[#050505] border border-white/10 flex items-center justify-center relative group overflow-hidden cursor-pointer hover-sound">
+                             <div class="font-display text-4xl text-gray-700 group-hover:text-white transition-colors">RWA</div>
+                             <div class="metric-overlay"><span class="font-mono text-neon font-bold">TRUST</span><span class="text-[9px] uppercase">Score: 98/100</span></div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 2. THE GLITCH -->
+            <!-- THE GLITCH -->
             <section class="py-24 px-4 md:px-12 bg-void border-b border-white/10">
                 <div class="max-w-4xl mx-auto">
                     <h2 class="font-display text-3xl md:text-5xl mb-8 uppercase text-white">The <span class="text-alert">Glitch.</span></h2>
                     <p class="font-mono text-base md:text-lg text-gray-400 leading-relaxed mb-6">
                         You are building financial rails for the world, but your visuals look like a shitcoin.
-                    </p>
-                    <p class="font-mono text-base md:text-lg text-gray-400 leading-relaxed mb-8">
-                        VCs need to see <span class="text-white font-bold">Trust</span>. Users need to feel <span class="text-white font-bold">FOMO</span>.
-                        Currently, you're broadcasting static.
                     </p>
                     <div class="flex gap-4 font-mono text-[10px] text-neon uppercase">
                         <span>● Audit-Ready</span>
@@ -319,7 +387,7 @@
                 </div>
             </section>
 
-            <!-- 3. THE UPGRADE (Slider) -->
+            <!-- THE UPGRADE -->
             <section class="py-24 px-4 md:px-12 bg-[#080808] border-b border-white/10">
                 <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
                     <div class="lg:w-1/3">
@@ -337,7 +405,7 @@
                 </div>
             </section>
 
-            <!-- 4. SYSTEM PATCH (7 ERROR CODES) -->
+            <!-- SYSTEM PATCH -->
             <section class="py-24 px-4 md:px-12 bg-void">
                 <div class="border-b border-white/20 pb-6 mb-12 flex justify-between items-end">
                     <h2 class="font-display text-3xl md:text-5xl uppercase">System <span class="text-neon">Patch</span></h2>
@@ -346,17 +414,16 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="matrix-grid"></div>
             </section>
 
-            <!-- 5. READY TO UPGRADE -->
-            <section id="cta" class="py-32 px-4 md:px-12 bg-[#050505] border-t border-white/20">
+            <!-- CTA -->
+            <section id="footer-cta" class="py-32 px-4 md:px-12 bg-[#050505] border-t border-white/20">
                 <div class="max-w-5xl mx-auto bg-[#0A0A0A] border border-white/20 p-8 md:p-16 relative overflow-hidden group">
                     <div class="absolute inset-0 bg-neon/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                     <div class="font-mono text-xs text-neon mb-6">root@blazebit:~# sudo execute_growth</div>
                     <h2 class="font-display text-4xl md:text-7xl text-white mb-8 leading-tight">
                         READY TO <br><span class="text-neon">UPGRADE?</span>
                     </h2>
-                    <button onclick="openHandshake()" class="w-full bg-neon text-black font-bold uppercase p-8 hover:bg-white transition-colors flex justify-between items-center group relative z-10 shadow-[0_0_30px_rgba(204,255,0,0.2)]">
-                        <span class="tracking-widest text-lg font-mono">> INITIALIZE HANDSHAKE</span>
-                        <span class="group-hover:translate-x-4 transition-transform font-mono text-lg">_ENTER</span>
+                    <button onclick="openHandshake(); playSound('click')" class="w-full bg-neon text-black font-bold uppercase p-8 hover:bg-white transition-colors flex justify-center items-center group relative z-10 shadow-[0_0_30px_rgba(204,255,0,0.2)] hover-sound whitespace-nowrap">
+                        <span class="tracking-widest text-lg font-mono">INITIALIZE HANDSHAKE</span>
                     </button>
                     <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 font-mono text-[10px] text-gray-500 uppercase">
                         <div>Avg Response: <span class="text-white">14m</span></div>
@@ -372,8 +439,8 @@
                 <div class="flex flex-col md:flex-row justify-between gap-6">
                     <div>BlazeBit.Studio /// Based in the Cloud</div>
                     <div class="flex gap-4">
-                        <a href="https://twitter.com/blazebit98" target="_blank" class="hover:text-neon">@blazebit98 (X)</a>
-                        <a href="https://t.me/BlazeBit98" target="_blank" class="hover:text-neon">@BlazeBit98 (TG)</a>
+                        <a href="https://twitter.com/blazebit98" target="_blank" class="hover:text-neon hover-sound">@blazebit98 (X)</a>
+                        <a href="https://t.me/BlazeBit98" target="_blank" class="hover:text-neon hover-sound">@BlazeBit98 (TG)</a>
                     </div>
                     <div>© 2026 Protocol</div>
                 </div>
@@ -384,23 +451,103 @@
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script>
-        // --- 1. DATA SOURCE ---
+        // --- 1. LOADER LOGIC (SAFE) ---
+        window.addEventListener('load', () => {
+            let count = 0; const c = document.getElementById('load-count'); const l = document.getElementById('loader');
+            const int = setInterval(() => { count+=5; if(count>100) count=100; c.innerText=(count<10?`0${count}`:count); if(count===100){clearInterval(int); setTimeout(()=>l.style.transform='translateY(-100%)',400);} }, 20);
+            setTimeout(() => { if (l.style.transform !== 'translateY(-100%)') l.style.transform='translateY(-100%)'; }, 3000);
+        });
+
+        // --- 2. AUDIO ENGINE (UPDATED FOR SLIDER) ---
+        let ctx;
+        let slideOsc, slideGain;
+
+        function getAudioContext() {
+            if (!ctx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) ctx = new AudioContext();
+            }
+            return ctx;
+        }
+        
+        function playSound(type) {
+            const context = getAudioContext();
+            if (!context) return;
+            if (context.state === 'suspended') context.resume();
+            
+            const osc = context.createOscillator();
+            const gain = context.createGain();
+            osc.connect(gain);
+            gain.connect(context.destination);
+            
+            if (type === 'hover') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(200, context.currentTime);
+                gain.gain.setValueAtTime(0.02, context.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.05);
+                osc.start(); osc.stop(context.currentTime + 0.05);
+            } else if (type === 'click') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(600, context.currentTime); osc.frequency.linearRampToValueAtTime(1200, context.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.05, context.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.1);
+                osc.start(); osc.stop(context.currentTime + 0.1);
+            } else if (type === 'success') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, context.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, context.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.1, context.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 1.5);
+                osc.start(); osc.stop(context.currentTime + 1.5);
+            }
+        }
+
+        // --- DYNAMIC SLIDER SOUND ---
+        function startSlideSound() {
+            const context = getAudioContext();
+            if(!context) return;
+            if (context.state === 'suspended') context.resume();
+            slideOsc = context.createOscillator();
+            slideGain = context.createGain();
+            slideOsc.type = 'sawtooth';
+            slideOsc.frequency.setValueAtTime(100, context.currentTime);
+            slideGain.gain.setValueAtTime(0.05, context.currentTime);
+            slideOsc.connect(slideGain);
+            slideGain.connect(context.destination);
+            slideOsc.start();
+        }
+
+        function updateSlideFrequency(progress) {
+            if(slideOsc && ctx) {
+                // Pitch shift from 100Hz to 600Hz based on progress (0 to 1)
+                const freq = 100 + (progress * 500);
+                slideOsc.frequency.setTargetAtTime(freq, ctx.currentTime, 0.1);
+            }
+        }
+
+        function stopSlideSound() {
+            if(slideOsc) {
+                try {
+                    // Ramp down nicely
+                    slideGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+                    slideOsc.stop(ctx.currentTime + 0.1);
+                } catch(e){}
+                slideOsc = null;
+            }
+        }
+
+        document.querySelectorAll('.hover-sound').forEach(el => el.addEventListener('mouseenter', () => playSound('hover')));
+
+        // --- 3. MATRIX DATA ---
         const matrixData = [
             { id: "01", cat: "BRAND", pain: "Pixel Art Hangover", fix: "Vector Modernization", desc: "Old pixel assets look like 2021 NFT projects.", score: 10 },
             { id: "02", cat: "BRAND", pain: "Brand Safety Risk", fix: "Sanitized Protocols", desc: "Using Pepe or Wojak is a liability. We design sanitized versions.", score: 10 },
             { id: "03", cat: "EDU", pain: "Complexity Gap", fix: "Visual Storyboards", desc: "Users don't understand yield mechanics. We use 2-panel visuals.", score: 9 },
             { id: "04", cat: "EDU", pain: "Leverage Fear", fix: "Safety Flow Charts", desc: "5x Leverage sounds like gambling. We create schematics showing safety.", score: 8 },
             { id: "05", cat: "VELOCITY", pain: "Market Dump Chaos", fix: "Emergency Ops Templates", desc: "When markets crash, we ship assets in 15 mins.", score: 10 },
-            { id: "06", cat: "BRAND", pain: "Generic Templates", fix: "Custom IP Protocol", desc: "Canva templates signal 'Low Effort'. We draw everything from scratch.", score: 8 },
+            { id: "06", cat: "BRAND", pain: "Generic Templates", fix: "Custom IP Protocol", desc: "Canva templates signal 'Low Effort'.", score: 8 },
             { id: "07", cat: "OPS", pain: "Slow Turnaround", fix: "The Newsroom Model", desc: "No quotes. No waiting. We ship within 24 hours.", score: 10 }
         ];
 
-        // --- 2. RENDER MATRIX ---
+        // --- RENDER MATRIX ---
         const grid = document.getElementById('matrix-grid');
         matrixData.forEach((item, index) => {
             const card = document.createElement('div');
-            card.className = "glitch-wrapper border border-white/10 p-6 bg-[#080808] hover:bg-white/5 hover:border-neon transition-all cursor-pointer h-48 flex flex-col justify-between group";
-            card.onclick = () => openMatrixModal(index);
+            card.className = "glitch-wrapper border border-white/20 p-6 bg-[#080808] hover:bg-white/5 hover:border-neon transition-all cursor-pointer h-48 flex flex-col justify-between group hover-sound hover:shadow-[0_0_30px_rgba(204,255,0,0.1)]";
+            card.onclick = () => { playSound('click'); openMatrixModal(index); };
             card.innerHTML = `
                 <div class="flex justify-between mb-2">
                     <span class="font-mono text-[10px] text-alert group-hover:hidden">[ERROR_0${index+1}]</span>
@@ -417,7 +564,136 @@
             grid.appendChild(card);
         });
 
-        // --- 3. MODAL LOGIC ---
+        // --- TERMINAL SCROLL LOGIC ---
+        const terminal = document.getElementById('trend-terminal');
+        const terminalSection = document.getElementById('terminal-section');
+        const trends = [
+            "> ALERT: SOLANA CONGESTION... PREPARING 'SORRY' GRAPHICS",
+            "> TRACKING: $BERA ECOSYSTEM... HIGH ACTIVITY",
+            "> DETECTED NARRATIVE: 'QUANT MEMES'... ASSETS READY",
+            "> MONITORING: ETH DENVER EVENTS... SWAG KITS INITIATED",
+            "> ANALYSIS: TIER-1 VC FUNDING ROUNDS... BRAND AUDITS PENDING"
+        ];
+        let hasTyped = false;
+
+        const observerTerminal = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasTyped) {
+                    hasTyped = true;
+                    typeLines();
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observerTerminal.observe(terminalSection);
+
+        function typeLines() {
+            let lineIndex = 0;
+            const interval = setInterval(() => {
+                if (lineIndex >= trends.length) {
+                    clearInterval(interval);
+                    setInterval(() => {
+                        if (terminal.firstElementChild) terminal.removeChild(terminal.firstElementChild);
+                        const div = document.createElement('div');
+                        div.innerText = trends[Math.floor(Math.random()*trends.length)];
+                        div.classList.add('mb-1');
+                        terminal.appendChild(div);
+                    }, 3000);
+                    return;
+                }
+                const div = document.createElement('div');
+                div.classList.add('mb-1');
+                div.style.opacity = '0';
+                div.innerText = trends[lineIndex];
+                terminal.appendChild(div);
+                setTimeout(() => div.style.opacity = '1', 50);
+                playSound('click');
+                lineIndex++;
+            }, 300);
+        }
+
+        // --- SMART DOCK LOGIC ---
+        const dock = document.getElementById('mobile-dock');
+        const heroCta = document.getElementById('hero-cta');
+        const footerCta = document.getElementById('footer-cta');
+        
+        window.addEventListener('scroll', () => {
+            const heroRect = heroCta.getBoundingClientRect();
+            const footerRect = footerCta.getBoundingClientRect();
+            const winH = window.innerHeight;
+            if ((heroRect.bottom > 0) || (footerRect.top < winH)) {
+                dock.classList.remove('visible');
+            } else {
+                dock.classList.add('visible');
+            }
+        });
+
+        // --- FORM LOGIC (PRICING & BRIBES) ---
+        function togglePricing(model) {
+            const pricingDiv = document.getElementById('pricing-options');
+            const slotDisplay = document.getElementById('slot-display');
+            if(model === 'retainer') {
+                pricingDiv.classList.remove('hidden');
+                pricingDiv.classList.add('grid');
+                slotDisplay.innerText = "SELECT TIER...";
+            } else {
+                pricingDiv.classList.add('hidden');
+                pricingDiv.classList.remove('grid');
+                slotDisplay.innerText = "";
+            }
+        }
+
+        // Logic 4: Only $500 is scarce + 8/6 hour randomization
+        function updateSlots(price) {
+            const slotDisplay = document.getElementById('slot-display');
+            if(price == 500) {
+                // Time based randomizer (8 Hour Blocks)
+                const hourBlock = Math.floor(Date.now() / (1000 * 60 * 60 * 8));
+                // Simple deterministic pseudo-random
+                const isFull = (hourBlock % 3 !== 0); // ~66% chance of being full per 8hr block
+
+                if (isFull) {
+                    slotDisplay.innerHTML = `
+                        <div class="flex flex-col gap-1 w-full">
+                            <span class="text-white">SLOTS FULL // BRIBE REQUIRED:</span>
+                            <div class="flex items-center gap-2 bg-white/5 p-2 border border-neon/30 rounded">
+                                <code class="font-mono text-[8px] text-gray-400 break-all leading-tight">raqiKH5XThZdgV5sTnou4HudAKYWukoP7hndFYaUS8y</code>
+                                <button onclick="copyAddress()" class="bg-neon text-black text-[9px] font-bold px-2 py-1 hover:scale-105 transition-transform">[COPY]</button>
+                            </div>
+                        </div>`;
+                } else {
+                    slotDisplay.innerText = "3 SLOTS AVAILABLE";
+                }
+            } else {
+                slotDisplay.innerText = "";
+            }
+        }
+
+        // Copy Function
+        function copyAddress() {
+            const addr = "raqiKH5XThZdgV5sTnou4HudAKYWukoP7hndFYaUS8y";
+            navigator.clipboard.writeText(addr).then(() => {
+                alert("ADDRESS COPIED. SEND USDC/SOL TO BYPASS QUEUE.");
+                playSound('success');
+            });
+        }
+
+        // --- LIVE METRICS ---
+        setInterval(() => {
+            document.getElementById('live-tvl').innerText = (12.4 + Math.random() * 0.2).toFixed(2);
+            document.getElementById('live-apy').innerText = (8.2 + Math.random() * 0.1).toFixed(1);
+        }, 2000);
+
+        // --- SCARCITY ---
+        const day = new Date().getDay();
+        const bandEl = document.getElementById('bandwidth-status');
+        if (day === 5 || day === 6 || day === 0) {
+            bandEl.innerText = "CRITICAL (WAITLIST)"; bandEl.classList.add('animate-pulse');
+        } else {
+            bandEl.innerText = `${3 - Math.floor(day/2)} SLOTS LEFT`;
+        }
+
+        // --- MODAL LOGIC ---
         const mModal = document.getElementById('matrix-modal');
         function openMatrixModal(index) {
             const d = matrixData[index];
@@ -428,27 +704,23 @@
             mModal.classList.remove('hidden');
             setTimeout(() => { mModal.classList.remove('opacity-0'); mModal.children[0].classList.remove('scale-95'); mModal.children[0].classList.add('scale-100'); }, 10);
         }
-        function closeMatrixModal() {
-            mModal.classList.add('opacity-0');
-            mModal.children[0].classList.remove('scale-100'); mModal.children[0].classList.add('scale-95');
-            setTimeout(() => mModal.classList.add('hidden'), 300);
-        }
+        function closeMatrixModal() { mModal.classList.add('opacity-0'); setTimeout(() => mModal.classList.add('hidden'), 300); }
 
         const hModal = document.getElementById('handshake-modal');
         window.openHandshake = () => { hModal.classList.remove('hidden'); setTimeout(() => hModal.classList.remove('opacity-0'), 10); };
         window.closeHandshake = () => { hModal.classList.add('opacity-0'); setTimeout(() => hModal.classList.add('hidden'), 300); };
 
-        // --- 4. SLIDER LOGIC ---
+        // --- SLIDER LOGIC ---
         const slider = document.getElementById('comparison-slider');
         const overlay = document.getElementById('overlay-div');
         const handle = document.getElementById('slider-handle');
         let isDragging = false;
+        
         const moveSlider = (x) => {
             const rect = slider.getBoundingClientRect();
             let pos = ((x - rect.left) / rect.width) * 100;
             if(pos < 0) pos=0; if(pos > 100) pos=100;
-            overlay.style.width = pos + "%";
-            handle.style.left = pos + "%";
+            overlay.style.width = pos + "%"; handle.style.left = pos + "%";
         };
         slider.addEventListener('mousedown', () => isDragging = true);
         window.addEventListener('mouseup', () => isDragging = false);
@@ -457,25 +729,29 @@
         window.addEventListener('touchend', () => isDragging = false);
         window.addEventListener('touchmove', (e) => { if(isDragging) moveSlider(e.touches[0].clientX); });
 
-        // --- 5. SCARCITY ---
-        const bandEl = document.getElementById('bandwidth-status');
-        if(localStorage.getItem('blaze_vFinal')) {
-            bandEl.innerText = "CRITICAL (1 SLOT)"; bandEl.classList.add('animate-pulse');
-        } else {
-            bandEl.innerText = "HIGH (3 SLOTS)";
-            setTimeout(() => {
-                bandEl.innerText = "LOW (1 SLOT)"; bandEl.classList.add('animate-pulse');
-                localStorage.setItem('blaze_vFinal', 'true');
-            }, 5000);
-        }
-
-        // --- 6. SWIPE TO MAILTO ---
+        // --- SWIPE LOGIC (FORM SUBMIT) ---
         const sTrack = document.getElementById('swipe-track');
         const sCont = document.getElementById('swipe-btn');
         let sDragging = false; let sStartX; let sSubmitted = false;
 
-        sTrack.addEventListener('mousedown', (e) => { if(!sSubmitted) { sDragging=true; sStartX=e.clientX; sTrack.style.transition='none'; }});
-        sTrack.addEventListener('touchstart', (e) => { if(!sSubmitted) { sDragging=true; sStartX=e.touches[0].clientX; sTrack.style.transition='none'; }});
+        // Logic 5: Start sound on slide, remove click sound
+        sTrack.addEventListener('mousedown', (e) => { 
+            if(!sSubmitted) { 
+                sDragging=true; 
+                sStartX=e.clientX; 
+                sTrack.style.transition='none'; 
+                startSlideSound();
+            }
+        });
+        sTrack.addEventListener('touchstart', (e) => { 
+            if(!sSubmitted) { 
+                sDragging=true; 
+                sStartX=e.touches[0].clientX; 
+                sTrack.style.transition='none'; 
+                startSlideSound();
+            }
+        });
+        
         window.addEventListener('mouseup', endSwipe); window.addEventListener('touchend', endSwipe);
         window.addEventListener('mousemove', moveSwipe); window.addEventListener('touchmove', moveSwipe);
 
@@ -484,48 +760,93 @@
             let cx = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
             let move = cx - sStartX;
             let max = sCont.offsetWidth - sTrack.offsetWidth;
-            if(move > 0 && move <= max) sTrack.style.transform = `translateX(${move}px)`;
+            
+            if(move > 0 && move <= max) {
+                sTrack.style.transform = `translateX(${move}px)`;
+                // Logic 5: Modulate Sound
+                updateSlideFrequency(move/max);
+            }
+            
             if(move >= max - 5) { 
-                sSubmitted=true; sDragging=false; 
-                sTrack.style.transform=`translateX(${max}px)`; sTrack.classList.add('swipe-complete'); sTrack.innerHTML="SENT!";
+                sSubmitted=true; sDragging=false;
+                stopSlideSound(); // Stop revving
+                sTrack.style.transform=`translateX(${max}px)`; 
+                sTrack.classList.add('swipe-complete'); 
+                document.getElementById('swipe-text').style.opacity = '0';
+                sTrack.innerHTML="SENT!";
+                if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
                 
-                // Trigger Text Animation Sequence
+                // Visual feedback
                 const log = document.getElementById('terminal-log');
-                const pName = document.getElementById('form-name').value;
-                const pTg = document.getElementById('form-tg').value;
+                const form = document.getElementById('terminal-form');
                 log.classList.remove('hidden');
+                log.innerHTML = "<div>> INITIATING WEB3 SECURE UPLINK...</div>";
+
+                // Logic 1: Web3Forms + Logic 3: Data Passing
+                const formData = new FormData(form);
                 
-                const msgs = ["> ENCRYPTING DATA...", "> ESTABLISHING UPLINK...", "> PACKET SENT."];
-                let i = 0;
-                const logInt = setInterval(() => {
-                    if(i >= msgs.length) { 
-                        clearInterval(logInt); 
-                        // OPEN MAIL APP
-                        window.location.href = `mailto:blazebit98@gmail.com?subject=New%20Project%3A%20${pName}&body=Protocol%3A%20${pName}%0ATelegram%3A%20${pTg}%0A%0AWe%20are%20ready%20to%20upgrade.`;
-                        return; 
+                fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    body: formData
+                }).then(response => {
+                    if (response.ok) {
+                        playSound('success');
+                        log.innerHTML += "<div class='text-neon'>> SUCCESS: UPLINK ESTABLISHED.</div>";
+                        resetSlider(); // Logic 2: Slide Back
+                        setTimeout(() => closeHandshake(), 2000);
+                    } else {
+                        triggerMailto(formData);
                     }
-                    const div = document.createElement('div'); div.innerText = msgs[i]; log.appendChild(div); i++;
-                }, 600);
+                }).catch(error => {
+                    triggerMailto(formData);
+                });
             }
         }
-        function endSwipe() {
-            if(sSubmitted) return;
-            sDragging = false; sTrack.style.transition='transform 0.3s'; sTrack.style.transform='translateX(0)';
+
+        // Logic 3: Pass Data to Mailto
+        function triggerMailto(formData) {
+            playSound('success');
+            const pName = document.getElementById('form-name').value;
+            const pTg = document.getElementById('form-tg').value;
+            const pMsg = document.getElementById('form-msg').value;
+            const pModel = document.querySelector('input[name="model"]:checked')?.value || "N/A";
+            const pPrice = document.querySelector('input[name="price"]:checked')?.value || "N/A";
+            
+            window.location.href = `mailto:blazebit98@gmail.com?subject=Project: ${pName}&body=Protocol: ${pName}%0ATelegram: ${pTg}%0AModel: ${pModel}%0APrice: ${pPrice}%0ABrief: ${pMsg}`;
+            resetSlider();
         }
 
-        // --- 7. CURSOR & LOAD ---
-        window.addEventListener('load', () => {
-            let count = 0; const c = document.getElementById('load-count'); const l = document.getElementById('loader');
-            const int = setInterval(() => { count+=5; if(count>100) count=100; c.innerText=(count<10?`0${count}`:count); if(count===100){clearInterval(int); setTimeout(()=>l.style.transform='translateY(-100%)',400);} }, 20);
-        });
-        const lenis = new Lenis({duration: 1.2, smooth: true});
-        function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
+        function endSwipe() {
+            if(sSubmitted) return;
+            sDragging = false; 
+            stopSlideSound();
+            sTrack.style.transition='transform 0.3s'; sTrack.style.transform='translateX(0)';
+        }
 
-        // Hyper Visual Pointer (Lag Effect)
-        const dot = document.querySelector('.cursor-dot');
-        const outline = document.querySelector('.cursor-outline');
+        // Logic 2: Slide Back Function
+        function resetSlider() {
+            setTimeout(() => {
+                sSubmitted = false;
+                sTrack.style.transition='all 0.5s ease';
+                sTrack.style.transform='translateX(0)';
+                sTrack.classList.remove('swipe-complete');
+                sTrack.innerHTML = '<span class="swipe-arrow">-></span>';
+                document.getElementById('swipe-text').style.opacity = '1';
+                // Clear log
+                setTimeout(() => document.getElementById('terminal-log').classList.add('hidden'), 500);
+            }, 3000);
+        }
+
+        // --- LENIS ---
+        if (typeof Lenis !== 'undefined') {
+            const lenis = new Lenis({duration: 1.2, smooth: true});
+            function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+            requestAnimationFrame(raf);
+        }
+
         if (window.matchMedia("(hover: hover)").matches) {
+            const dot = document.querySelector('.cursor-dot');
+            const outline = document.querySelector('.cursor-outline');
             window.addEventListener('mousemove', (e) => {
                 dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
                 outline.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 500, fill: "forwards" });
